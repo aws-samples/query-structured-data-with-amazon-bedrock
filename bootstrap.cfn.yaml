@@ -126,11 +126,13 @@ Resources:
               CDK_NEW_BOOTSTRAP: "1"
           phases:
             pre_build:
+              commands:
+                - set -ex
             build:
               commands:
                 - set -ex
                 - git clone --single-branch -b $PUBLIC_REPO_BRANCH --depth 1 $PUBLIC_REPO code
-                - cd cdk
+                - cd code/cdk
                 - npm install
                 - npx cdk bootstrap
                 - npx cdk deploy --all --require-approval never
