@@ -11,6 +11,21 @@ import { AwsSolutionsChecks } from "cdk-nag";
 // Local Dependencies:
 import { CdkStack } from "../lib/cdk-stack";
 
+function booleanEnvVar(name: string, defaultValue = false): boolean {
+  const envVar = process.env[name];
+  if (envVar === undefined) {
+    return defaultValue;
+  }
+  const envLower = envVar.toLowerCase();
+  if (["1", "t", "true", "y", "yes"].indexOf(envLower) >= 0) {
+    return true;
+  } else if (["0", "f", "false", "n", "no"].indexOf(envLower) >= 0) {
+    return false;
+  } else {
+    throw new Error(`Invalid boolean environment variable: ${name}=${envVar}`);
+  }
+}
+
 export function main(): cdk.App {
   const app = new cdk.App();
 
@@ -21,7 +36,7 @@ export function main(): cdk.App {
    */
   cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
 
-  new CdkStack(app, "BedrockDataExp", {
+  const appConfig = {
     /* If you don't specify 'env', this stack will be environment-agnostic.
      * Account/Region-dependent features and context lookups will not work,
      * but a single synthesized template can be deployed anywhere. */
@@ -32,10 +47,14 @@ export function main(): cdk.App {
      * want to deploy the stack to. */
     // env: { account: '123456789012', region: 'us-east-1' },
     /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
-    /* Set true to disable some or all of the sample data sources: */
-    disableAthenaSample: false,
-    disableNeptuneSample: false,
-    disableRdsSample: false,
-  });
+    /* Set environment variables or modify default values to disable some or all of the sample data
+     * sources: */
+    enableAthenaSample: booleanEnvVar("SAMPLE_DATA_SOURCE_ATHENA", true),
+    enableNeptuneSample: booleanEnvVar("SAMPLE_DATA_SOURCE_NEPTUNE", true),
+    enableRdsSample: booleanEnvVar("SAMPLE_DATA_SOURCE_RDS", true),
+  };
+
+  console.log(`CDK app configuration:\n${JSON.stringify(appConfig, null, 2)}`);
+  new CdkStack(app, "BedrockDataExp", appConfig);
   return app;
 }

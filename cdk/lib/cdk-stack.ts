@@ -25,17 +25,17 @@ import { DataExplorationOrchestratorJava, IDataExplorationOrchestrator } from ".
  */
 export interface DataExplorationStackProps extends cdk.StackProps {
   /**
-   * Set true to disable the Amazon Athena (TPC-H) sample data source
+   * Set true to enable the Amazon Athena (TPC-H) sample data source
    */
-  disableAthenaSample?: boolean;
+  enableAthenaSample?: boolean;
   /**
-   * Set true to disable the Amazon Neptune (IMDb) sample data source
+   * Set true to enable the Amazon Neptune (IMDb) sample data source
    */
-  disableNeptuneSample?: boolean;
+  enableNeptuneSample?: boolean;
   /**
-   * Set true to disable the Amazon RDS (Pagila) sample data source
+   * Set true to enable the Amazon RDS (Pagila) sample data source
    */
-  disableRdsSample?: boolean;
+  enableRdsSample?: boolean;
 }
 
 /**
@@ -46,9 +46,9 @@ export class CdkStack extends cdk.Stack {
 
   constructor(scope: Construct, id: string, props?: DataExplorationStackProps) {
     super(scope, id, props);
-    const enableAthenaSample = !(props && props.disableAthenaSample);
-    const enableNeptuneSample = !(props && props.disableNeptuneSample);
-    const enableRdsSample = !(props && props.disableRdsSample);
+    const enableAthenaSample = props ? !!props.enableAthenaSample : true;
+    const enableNeptuneSample = props ? !!props.enableNeptuneSample : true;
+    const enableRdsSample = props ? !!props.enableRdsSample : true;
 
     const vpcInfra = new VpcInfra(this, "VpcInfra");
 

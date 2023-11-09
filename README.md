@@ -63,11 +63,12 @@ The sample supports 3 example data sources and by default pre-populates an examp
 
 This sample is built with [AWS CDK](https://aws.amazon.com/cdk/), which requires setting up a development environment as described below. However, if you'd like to **just deploy the stack as-is** - you can use the one-click CloudFormation template linked below:
 
-**TODO: Populate once the public GitHub URL is ready because we need that first**
+[![Launch Stack](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/create/review?templateURL=https://s3.amazonaws.com/bedrock-data-exploration-assets-us-east-1/bedrockdataexp-bootstrap.cfn.yaml&stackName=BedrockDataExpBootstrap "Launch Stack") (Or use [bootstrap.cfn.yaml](bootstrap.cfn.yaml))
 
 > **Configuration notes:**
 >
 > - You'll need to target an AWS Region (e.g. `N. Virginia`) where Bedrock is currently supported and Anthropic Claude text generation models have been [enabled](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)
+> - ⏰ This CloudFormation stack **starts** the CDK solution deployment process via [AWS CodeBuild](https://aws.amazon.com/codebuild/), but does not wait for it to complete. Refer to the other stacks created in CloudFormation console, and logs in CodeBuild, for overall deployment status.
 
 
 ## Customizing the stack
