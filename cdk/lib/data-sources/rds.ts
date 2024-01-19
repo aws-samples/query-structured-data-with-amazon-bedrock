@@ -61,7 +61,7 @@ export class RdsInfra extends Construct implements IDataSource {
     this.dbCluster = new rds.DatabaseCluster(this, "RDSCluster", {
       defaultDatabaseName: this.databaseName,
       engine: rds.DatabaseClusterEngine.auroraPostgres({
-        version: rds.AuroraPostgresEngineVersion.VER_15_2,
+        version: rds.AuroraPostgresEngineVersion.VER_15_5,
       }),
       port: this.portNumber,
       serverlessV2MaxCapacity: 8,
@@ -70,7 +70,9 @@ export class RdsInfra extends Construct implements IDataSource {
       storageEncrypted: true,
       subnetGroup: this.subnetGroup,
       vpc: props.vpc,
-      writer: rds.ClusterInstance.serverlessV2("RDSWriter", {}),
+      writer: rds.ClusterInstance.serverlessV2("RDSWriter", {
+        caCertificate: rds.CaCertificate.RDS_CA_RDS4096_G1,
+      }),
     });
     NagSuppressions.addResourceSuppressions(this.dbCluster, [
       { id: "AwsSolutions-RDS6", reason: "TODO: Switch to IAM-based database authentication" },

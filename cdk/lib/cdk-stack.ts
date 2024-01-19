@@ -95,7 +95,7 @@ export class CdkStack extends cdk.Stack {
       handler: "onEvent",
       memorySize: 128,
       role: loaderRole,
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_20_X,
       securityGroups: [vpcInfra.dbSecurityGroup],
       timeout: cdk.Duration.minutes(10),
       vpc: vpcInfra.vpc,
@@ -117,6 +117,10 @@ export class CdkStack extends cdk.Stack {
           reason: "framework-onEvent CR Provider can use default permissions",
           appliesTo: [{ regex: "/^Resource::<DataLoaderFn.*>:\\*$/" }],
         },
+        {
+          id: "AwsSolutions-L1",
+          reason: "framework-onEvent CR Provider uses older Lamda runtime",
+        }
       ],
       true
     );
